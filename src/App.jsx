@@ -128,13 +128,13 @@ export default function App() {
         {/* ================= 1. HEADER / HERO SECTION ================= */}
         <header className="flex flex-col items-center text-center mb-8 sm:mb-10">
           
-          {/* Enlarged Square Hero Card (w-48 h-48 on mobile, w-64 h-64 to w-72 h-72 on desktop) */}
-          <div className="relative group mb-6">
+          {/* Hero Card Enlarge - Length equal to Doha outer box with best-fit height */}
+          <div className="relative group mb-6 w-full">
             {/* Ambient Divine Glow */}
             <div className="absolute -inset-2 rounded-3xl bg-gradient-to-tr from-amber-500 via-yellow-400 to-red-500 opacity-40 blur-lg group-hover:opacity-70 group-hover:blur-xl transition duration-700"></div>
             
-            {/* Enlarged Square Card Container */}
-            <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 aspect-square rounded-2xl sm:rounded-3xl overflow-hidden border-2 sm:border-4 border-amber-300/90 shadow-xl shadow-amber-900/10 bg-amber-50 p-1.5 backdrop-blur-xs">
+            {/* Full-width Box matching Doha width with best-fit height */}
+            <div className="relative w-full h-64 sm:h-80 md:h-96 rounded-2xl sm:rounded-3xl overflow-hidden border-2 sm:border-3 border-amber-300/90 shadow-xl shadow-amber-900/10 bg-amber-50 p-1.5 backdrop-blur-xs">
               <img
                 src="/assets/hanuman_dhyan.jpg"
                 alt="Lord Hanuman in Dhyan Posture - ध्यान मग्न श्री हनुमान जी"
@@ -147,7 +147,7 @@ export default function App() {
             <button
               onClick={handlePranam}
               title="पुष्पांजलि व प्रणाम अर्पित करें"
-              className="absolute -bottom-3 right-2 sm:right-3 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-600 to-red-600 hover:from-amber-500 hover:to-red-500 text-white text-xs font-semibold shadow-lg active:scale-95 transition-all"
+              className="absolute -bottom-3 right-3 sm:right-4 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-600 to-red-600 hover:from-amber-500 hover:to-red-500 text-white text-xs font-semibold shadow-lg active:scale-95 transition-all"
             >
               <Heart className="w-3.5 h-3.5 fill-current animate-bounce" />
               <span>प्रणाम {pranamCount > 0 && `(${pranamCount})`}</span>
@@ -306,12 +306,12 @@ export default function App() {
             <span className="text-[11px]">{autoScroll ? 'चल रहा है' : 'स्क्रॉल'}</span>
           </button>
 
-          {/* Speed Selector (0.75x, 1x, 1.5x) */}
+          {/* Speed Selector (1x, 1.5x, 2x) */}
           <div className="flex items-center bg-amber-50 rounded-full p-0.5 border border-amber-200/70">
             {[
-              { val: 0.75, label: '0.75x', title: 'धीमी गति (Slow)' },
-              { val: 1.0, label: '1x', title: 'सामान्य गति (Normal Reading)' },
-              { val: 1.5, label: '1.5x', title: 'तेज़ गति (Fast)' }
+              { val: 1.0, label: '1x', title: 'सामान्य गति (Normal Reading - 1x)' },
+              { val: 1.5, label: '1.5x', title: 'मध्यम-तेज़ गति (Medium Fast - 1.5x)' },
+              { val: 2.0, label: '2x', title: 'तेज़ गति (Fast - 2x)' }
             ].map(({ val, label, title }) => (
               <button
                 key={val}
@@ -319,7 +319,7 @@ export default function App() {
                   setSpeedMultiplier(val);
                   if (!autoScroll) setAutoScroll(true);
                 }}
-                className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold transition ${
+                className={`px-2 py-0.5 rounded-full text-[10px] font-bold transition ${
                   speedMultiplier === val
                     ? 'bg-amber-600 text-white shadow-xs'
                     : 'text-amber-900 hover:bg-amber-200/60'
