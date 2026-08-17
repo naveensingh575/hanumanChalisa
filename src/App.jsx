@@ -14,9 +14,9 @@ export default function App() {
   const [petalsActive, setPetalsActive] = useState(false);
   const [pranamCount, setPranamCount] = useState(0);
 
-  // Auto Scroll State: Default human reading speed multiplier = 1.0 (45 px/sec)
+  // Auto Scroll State: Default human reading speed multiplier = 0.75 (maps to 1x button)
   const [autoScroll, setAutoScroll] = useState(false);
-  const [speedMultiplier, setSpeedMultiplier] = useState(1.0); // 0.75x, 1.0x, 1.5x
+  const [speedMultiplier, setSpeedMultiplier] = useState(0.75); // 0.75x button -> 0.5 actual, 1x button -> 0.75 actual, 1.5x button -> 1.0 actual
   const scrollAnimRef = useRef(null);
   const isUserInteractingRef = useRef(false);
 
@@ -365,12 +365,12 @@ export default function App() {
             <span className="text-[11px]">{autoScroll ? 'चल रहा है' : 'स्क्रॉल'}</span>
           </button>
 
-          {/* Speed Selector (0.75x, 1x, 1.5x) */}
+          {/* Speed Selector with button labels [0.75x, 1x, 1.5x] mapped to actual fine speeds [0.5x, 0.75x, 1.0x] */}
           <div className="flex items-center bg-amber-50 rounded-full p-0.5 border border-amber-200/70">
             {[
-              { val: 0.75, label: '0.75x', title: 'धीमी गति (Slow Mobile Pace - 0.75x)' },
-              { val: 1.0, label: '1x', title: 'सामान्य गति (Normal Reading - 1x)' },
-              { val: 1.5, label: '1.5x', title: 'तेज़ गति (Fast - 1.5x)' }
+              { val: 0.5, label: '0.75x', title: 'धीमी गति (Slow - 0.75x)' },
+              { val: 0.75, label: '1x', title: 'सामान्य गति (Normal Reading - 1x)' },
+              { val: 1.0, label: '1.5x', title: 'तेज़ गति (Fast - 1.5x)' }
             ].map(({ val, label, title }) => (
               <button
                 key={val}
