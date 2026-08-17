@@ -45,43 +45,38 @@ export default function App() {
     playTempleBell();
   };
 
-  // Pause auto-scroll on manual user touch or wheel interaction
-  useEffect(() => {
-    const handleUserScroll = () => {
-      if (autoScroll && !isUserInteractingRef.current) {
-        setAutoScroll(false);
-      }
-    };
+  // Auto Scroll Engine & Touch Handling for 100% Mobile Browser Compatibility (Chrome, Edge, Safari)
+  const autoScrollStartedAtRef = useRef(0);
+  const touchStartYRef = useRef(0);
 
-    window.addEventListener('wheel', handleUserScroll, { passive: true });
-    window.addEventListener('touchmove', handleUserScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener('wheel', handleUserScroll);
-      window.removeEventListener('touchmove', handleUserScroll);
-    };
-  }, [autoScroll]);
-
-  // Auto Scroll Engine (Human reading pace: base 45 px/sec)
+  // Auto Scroll Loop (Human reading pace: base 45 px/sec)
   useEffect(() => {
     if (!autoScroll) {
       if (scrollAnimRef.current) cancelAnimationFrame(scrollAnimRef.current);
       return;
     }
 
+    autoScrollStartedAtRef.current = Date.now();
     let lastTimestamp = performance.now();
     const basePace = 45; // 45 pixels per second represents comfortable reading speed
 
     const scrollLoop = (currentTimestamp) => {
-      const deltaSeconds = (currentTimestamp - lastTimestamp) / 1000;
+      const deltaSeconds = Math.min((currentTimestamp - lastTimestamp) / 1000, 0.1);
       lastTimestamp = currentTimestamp;
 
-      // Scroll smoothly down
+      // Scroll smoothly down using direct documentElement scroll for 100% mobile compatibility
       const pixelsToScroll = basePace * speedMultiplier * deltaSeconds;
-      window.scrollBy(0, pixelsToScroll);
+      
+      if (pixelsToScroll > 0) {
+        window.scrollBy({ top: pixelsToScroll, left: 0, behavior: 'instant' });
+      }
 
       // Check if reached the bottom of page
-      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 30) {
+      const currentScroll = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+      const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+      const totalHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+
+      if (currentScroll + windowHeight >= totalHeight - 20) {
         setAutoScroll(false);
         return;
       }
@@ -96,12 +91,53 @@ export default function App() {
     };
   }, [autoScroll, speedMultiplier]);
 
+  // Touch & Wheel Event handling: only pause on intentional user scroll after initial button tap
+  useEffect(() => {
+    if (!autoScroll) return;
+
+    const handleWheel = (e) => {
+      if (Math.abs(e.deltaY) > 3) {
+        setAutoScroll(false);
+      }
+    };
+
+    const handleTouchStart = (e) => {
+      if (e.touches && e.touches[0]) {
+        touchStartYRef.current = e.touches[0].clientY;
+      }
+    };
+
+    const handleTouchMove = (e) => {
+      // Ignore touch during the first 450ms of clicking the button
+      if (Date.now() - autoScrollStartedAtRef.current < 450) return;
+
+      if (e.touches && e.touches[0]) {
+        const touchCurrentY = e.touches[0].clientY;
+        const diff = Math.abs(touchCurrentY - touchStartYRef.current);
+        // Only pause if user performed an intentional finger drag > 25px
+        if (diff > 25) {
+          setAutoScroll(false);
+        }
+      }
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: true });
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+    };
+  }, [autoScroll]);
+
   const toggleAutoScroll = () => {
     setAutoScroll(prev => !prev);
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] text-[#1E293B] flex flex-col items-center selection:bg-amber-100 selection:text-amber-900 relative">
+    <div className="notranslate min-h-screen bg-[#FDFBF7] text-[#1E293B] flex flex-col items-center selection:bg-amber-100 selection:text-amber-900 relative" translate="no">
       
       {/* Floating Flower Petals (पुष्प वर्षा) */}
       {petalsActive && (

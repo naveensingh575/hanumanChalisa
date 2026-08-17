@@ -4,7 +4,7 @@
 
 @layer base {
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
     -webkit-tap-highlight-color: transparent;
   }
 
@@ -14,6 +14,10 @@
     font-family: 'Noto Serif Devanagari', 'Tiro Devanagari Hindi', 'Rozha One', serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  .notranslate {
+    translate: no !important;
   }
 }
 
