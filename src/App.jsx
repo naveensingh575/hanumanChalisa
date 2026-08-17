@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Bell, Sparkles, Heart, Play, Pause, ArrowDown } from 'lucide-react';
+import { Bell, Sparkles, Heart, Play, Pause } from 'lucide-react';
 import { openingDohas, chaupais, closingDoha } from './data/chalisaData';
 import { playTempleBell } from './utils/audioEngine';
 import confetti from 'canvas-confetti';
@@ -14,10 +14,11 @@ export default function App() {
   const [petalsActive, setPetalsActive] = useState(false);
   const [pranamCount, setPranamCount] = useState(0);
 
-  // Auto Scroll State
+  // Auto Scroll State: Default human reading speed multiplier = 1.0 (45 px/sec)
   const [autoScroll, setAutoScroll] = useState(false);
-  const [scrollSpeed, setScrollSpeed] = useState(1.5); // pixels per tick
+  const [speedMultiplier, setSpeedMultiplier] = useState(1.0); // 0.75x, 1.0x, 1.5x
   const scrollAnimRef = useRef(null);
+  const isUserInteractingRef = useRef(false);
 
   useEffect(() => {
     localStorage.setItem('hc_minimal_fontsize', fontSize.toString());
@@ -44,24 +45,43 @@ export default function App() {
     playTempleBell();
   };
 
-  // Auto Scroll Engine
+  // Pause auto-scroll on manual user touch or wheel interaction
+  useEffect(() => {
+    const handleUserScroll = () => {
+      if (autoScroll && !isUserInteractingRef.current) {
+        setAutoScroll(false);
+      }
+    };
+
+    window.addEventListener('wheel', handleUserScroll, { passive: true });
+    window.addEventListener('touchmove', handleUserScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('wheel', handleUserScroll);
+      window.removeEventListener('touchmove', handleUserScroll);
+    };
+  }, [autoScroll]);
+
+  // Auto Scroll Engine (Human reading pace: base 45 px/sec)
   useEffect(() => {
     if (!autoScroll) {
       if (scrollAnimRef.current) cancelAnimationFrame(scrollAnimRef.current);
       return;
     }
 
-    let lastTime = performance.now();
+    let lastTimestamp = performance.now();
+    const basePace = 45; // 45 pixels per second represents comfortable reading speed
 
-    const scrollLoop = (time) => {
-      const delta = (time - lastTime) / 1000;
-      lastTime = time;
+    const scrollLoop = (currentTimestamp) => {
+      const deltaSeconds = (currentTimestamp - lastTimestamp) / 1000;
+      lastTimestamp = currentTimestamp;
 
-      // Scroll smoothly down (e.g. ~35 pixels per second)
-      window.scrollBy(0, 35 * delta * (scrollSpeed / 1.5));
+      // Scroll smoothly down
+      const pixelsToScroll = basePace * speedMultiplier * deltaSeconds;
+      window.scrollBy(0, pixelsToScroll);
 
-      // Check if reached near bottom
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 40) {
+      // Check if reached the bottom of page
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 30) {
         setAutoScroll(false);
         return;
       }
@@ -74,7 +94,7 @@ export default function App() {
     return () => {
       if (scrollAnimRef.current) cancelAnimationFrame(scrollAnimRef.current);
     };
-  }, [autoScroll, scrollSpeed]);
+  }, [autoScroll, speedMultiplier]);
 
   const toggleAutoScroll = () => {
     setAutoScroll(prev => !prev);
@@ -103,22 +123,22 @@ export default function App() {
       )}
 
       {/* Main Reading Container */}
-      <main className="w-full max-w-2xl mx-auto px-4 sm:px-6 pt-8 sm:pt-10 pb-24">
+      <main className="w-full max-w-2xl mx-auto px-4 sm:px-6 pt-8 sm:pt-10 pb-28">
         
         {/* ================= 1. HEADER / HERO SECTION ================= */}
         <header className="flex flex-col items-center text-center mb-8 sm:mb-10">
           
-          {/* Large High-Resolution Portrait with Glowing Halo */}
-          <div className="relative group mb-5">
-            {/* Soft Ambient Halo */}
-            <div className="absolute -inset-2 rounded-full bg-gradient-to-tr from-amber-500 via-yellow-400 to-red-500 opacity-60 blur-md group-hover:opacity-90 group-hover:blur-lg transition duration-700 animate-pulse-slow"></div>
+          {/* Enlarged Square Hero Image with Soft Rounded Corners & Glow */}
+          <div className="relative group mb-6">
+            {/* Ambient Divine Glow */}
+            <div className="absolute -inset-2 rounded-3xl bg-gradient-to-tr from-amber-500 via-yellow-400 to-red-500 opacity-40 blur-lg group-hover:opacity-70 group-hover:blur-xl transition duration-700"></div>
             
-            {/* Lord Hanuman in Dhyan Posture Image */}
-            <div className="relative w-44 h-44 sm:w-56 sm:h-56 rounded-full overflow-hidden border-4 border-amber-200 shadow-xl bg-amber-50 p-1">
+            {/* Enlarged Square Card (w-48 h-48 mobile to w-64 h-64 / w-72 h-72 desktop) */}
+            <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 rounded-2xl sm:rounded-3xl overflow-hidden border-2 sm:border-4 border-amber-300/90 shadow-xl bg-amber-50 p-1.5 backdrop-blur-xs">
               <img
                 src="/assets/hanuman_dhyan.jpg"
                 alt="Lord Hanuman in Dhyan Posture - ध्यान मग्न श्री हनुमान जी"
-                className="w-full h-full object-cover object-center rounded-full transform group-hover:scale-105 transition-transform duration-700"
+                className="w-full h-full object-cover object-center rounded-xl sm:rounded-2xl transform group-hover:scale-102 transition-transform duration-700"
                 loading="eager"
               />
             </div>
@@ -127,7 +147,7 @@ export default function App() {
             <button
               onClick={handlePranam}
               title="पुष्पांजलि व प्रणाम अर्पित करें"
-              className="absolute -bottom-2 right-2 sm:right-4 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-600 to-red-600 hover:from-amber-500 hover:to-red-500 text-white text-xs font-semibold shadow-lg active:scale-95 transition-all"
+              className="absolute -bottom-3 right-2 sm:right-3 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-600 to-red-600 hover:from-amber-500 hover:to-red-500 text-white text-xs font-semibold shadow-lg active:scale-95 transition-all"
             >
               <Heart className="w-3.5 h-3.5 fill-current animate-bounce" />
               <span>प्रणाम {pranamCount > 0 && `(${pranamCount})`}</span>
@@ -161,7 +181,7 @@ export default function App() {
               <span>{petalsActive ? 'पुष्प वर्षा (चालू) 🌸' : 'फूल वर्षा 🌸'}</span>
             </button>
 
-            {/* Auto Scroll Mode (📜) */}
+            {/* Auto Scroll Toggle */}
             <button
               onClick={toggleAutoScroll}
               className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border text-xs font-semibold transition active:scale-95 ${
@@ -177,12 +197,12 @@ export default function App() {
 
           </div>
 
-          {/* Heading */}
+          {/* Main Title */}
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[#B45309] drop-shadow-xs mb-2">
             ॥ श्री हनुमान चालीसा ॥
           </h1>
 
-          {/* Subheading */}
+          {/* Subtitle */}
           <p className="text-sm sm:text-base text-amber-800 font-medium">
             जय श्री राम | संकट मोचन कृपा निधान
           </p>
@@ -222,7 +242,7 @@ export default function App() {
               </span>
             </div>
 
-            {/* Continuous Seamless Flow of all 40 Chaupais - Pure verses without numbers */}
+            {/* Continuous Seamless Flow of all 40 Chaupais */}
             <div
               className="font-medium leading-relaxed tracking-wide text-[#1E293B] space-y-5 text-center sm:text-left divide-y divide-amber-100/70"
               style={{ fontSize: `${fontSize}px` }}
@@ -270,47 +290,75 @@ export default function App() {
 
       </main>
 
-      {/* ================= 6. FLOATING FONT SIZE & AUTO-SCROLL CONTROLLER ================= */}
-      <aside aria-label="Reading Controls" className="fixed bottom-5 right-5 z-40">
-        <div className="flex items-center gap-1.5 bg-white/95 border border-amber-200 shadow-lg rounded-full p-1.5 backdrop-blur-sm">
+      {/* ================= 6. FLOATING DOCK: FONT SIZE & AUTO-SCROLL UTILITY ================= */}
+      <aside aria-label="Reading Controls" className="fixed bottom-4 left-1/2 -translate-x-1/2 sm:left-auto sm:right-5 sm:translate-x-0 z-40 max-w-[95vw]">
+        <div className="flex items-center gap-1 sm:gap-1.5 bg-white/95 border border-amber-300/80 shadow-xl rounded-full px-2.5 py-1.5 backdrop-blur-md">
           
-          {/* Quick Auto Scroll Toggle in Floating Pill */}
+          {/* Auto Scroll Play/Pause Button */}
           <button
             onClick={toggleAutoScroll}
-            className={`w-8 h-8 rounded-full flex items-center justify-center text-xs transition active:scale-95 ${
-              autoScroll ? 'bg-green-600 text-white animate-pulse' : 'text-amber-900 hover:bg-amber-100'
+            className={`px-2.5 py-1 rounded-full text-xs font-bold flex items-center gap-1 transition active:scale-95 ${
+              autoScroll ? 'bg-green-600 text-white shadow-sm animate-pulse' : 'bg-amber-100/80 text-amber-900 hover:bg-amber-200'
             }`}
             title={autoScroll ? 'ऑटो स्क्रॉल रोकें' : 'ऑटो स्क्रॉल चालू करें'}
           >
-            {autoScroll ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 ml-0.5" />}
+            {autoScroll ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+            <span className="text-[11px]">{autoScroll ? 'चल रहा है' : 'स्क्रॉल'}</span>
           </button>
 
-          <div className="w-[1px] h-4 bg-amber-200"></div>
+          {/* Speed Selector (0.75x, 1x, 1.5x) */}
+          <div className="flex items-center bg-amber-50 rounded-full p-0.5 border border-amber-200/70">
+            {[
+              { val: 0.75, label: '0.75x', title: 'धीमी गति (Slow)' },
+              { val: 1.0, label: '1x', title: 'सामान्य गति (Normal Reading)' },
+              { val: 1.5, label: '1.5x', title: 'तेज़ गति (Fast)' }
+            ].map(({ val, label, title }) => (
+              <button
+                key={val}
+                onClick={() => {
+                  setSpeedMultiplier(val);
+                  if (!autoScroll) setAutoScroll(true);
+                }}
+                className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold transition ${
+                  speedMultiplier === val
+                    ? 'bg-amber-600 text-white shadow-xs'
+                    : 'text-amber-900 hover:bg-amber-200/60'
+                }`}
+                title={title}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
 
-          {/* Font Size Buttons */}
-          <button
-            onClick={decreaseFontSize}
-            className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-amber-900 hover:bg-amber-100 transition active:scale-95"
-            title="अक्षर छोटा करें (A-)"
-          >
-            A-
-          </button>
-          
-          <button
-            onClick={resetFontSize}
-            className="px-1.5 h-8 rounded-full flex items-center justify-center text-[11px] font-semibold text-amber-800 hover:bg-amber-50 transition"
-            title="सामान्य आकार (Reset)"
-          >
-            {fontSize}px
-          </button>
+          <div className="w-[1px] h-4 bg-amber-200 mx-0.5"></div>
 
-          <button
-            onClick={increaseFontSize}
-            className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-amber-900 hover:bg-amber-100 transition active:scale-95"
-            title="अक्षर बड़ा करें (A+)"
-          >
-            A+
-          </button>
+          {/* Font Size Adjusters */}
+          <div className="flex items-center gap-0.5">
+            <button
+              onClick={decreaseFontSize}
+              className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-amber-900 hover:bg-amber-100 transition active:scale-95"
+              title="अक्षर छोटा करें (A-)"
+            >
+              A-
+            </button>
+            
+            <button
+              onClick={resetFontSize}
+              className="px-1 h-7 rounded-full flex items-center justify-center text-[10px] font-semibold text-amber-800 hover:bg-amber-50 transition"
+              title="सामान्य आकार (Reset)"
+            >
+              {fontSize}px
+            </button>
+
+            <button
+              onClick={increaseFontSize}
+              className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-amber-900 hover:bg-amber-100 transition active:scale-95"
+              title="अक्षर बड़ा करें (A+)"
+            >
+              A+
+            </button>
+          </div>
 
         </div>
       </aside>
