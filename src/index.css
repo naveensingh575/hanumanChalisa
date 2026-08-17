@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: #FDFBF7;
+    color: #1E293B;
+    font-family: 'Noto Serif Devanagari', 'Tiro Devanagari Hindi', 'Rozha One', serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Custom minimal scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #E2D9CC;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #D97706;
+}
+
+/* Devotional Card Styling */
+.reader-card {
+  background: #FFFFFF;
+  border: 1px solid #EFE9DE;
+  box-shadow: 0 4px 24px -4px rgba(180, 83, 9, 0.05);
+}
+
+.doha-card {
+  background: #FFFDF9;
+  border: 1.5px solid #FCD34D;
+  box-shadow: 0 4px 24px -2px rgba(217, 119, 6, 0.08);
+}
+
+/* Diya Lamp Glow Effect */
+.diya-glow {
+  filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.8)) drop-shadow(0 0 20px rgba(225, 29, 72, 0.5));
+}
+
+/* Floating Flower Petals */
+@keyframes petalFall {
+  0% {
+    transform: translateY(-20px) rotate(0deg) scale(0.8);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.85;
+  }
+  80% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg) scale(1.1);
+    opacity: 0;
+  }
+}
+
+.petal-particle {
+  position: fixed;
+  top: -10px;
+  pointer-events: none;
+  animation: petalFall linear infinite;
+  z-index: 40;
+}
