@@ -321,18 +321,30 @@ export default function App() {
         </section>
 
         {/* ================= 5. FOOTER ================= */}
-        <footer className="text-center pt-4 pb-8 space-y-2 border-t border-amber-200/60">
+        <footer className="text-center pt-6 pb-8 space-y-4 border-t border-amber-200/60">
           <p className="text-base sm:text-lg font-bold text-[#B45309]">
             ॥ इति श्री हनुमान चालीसा समाप्त ॥
           </p>
           <p className="text-sm font-semibold text-amber-800">
             🚩 जय सिया राम 🚩
           </p>
+
+          {/* Scroll to Top Button in Footer */}
+          <div className="pt-2">
+            <button
+              onClick={scrollToTop}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-amber-100/90 hover:bg-amber-200 text-amber-900 border border-amber-300 text-xs font-bold shadow-xs active:scale-95 transition-all"
+              title="आरंभ में वापस जाएं"
+            >
+              <ArrowUp className="w-4 h-4 text-amber-700" />
+              <span>शीर्ष पर जाएं (Scroll to Top)</span>
+            </button>
+          </div>
         </footer>
 
       </main>
 
-      {/* ================= 6. FLOATING DOCK: FONT SIZE & AUTO-SCROLL UTILITY ================= */}
+      {/* ================= 6. FLOATING DOCK: FONT SIZE, AUTO-SCROLL, & SCROLL TOP ================= */}
       <aside aria-label="Reading Controls" className="fixed bottom-4 left-1/2 -translate-x-1/2 sm:left-auto sm:right-5 sm:translate-x-0 z-40 max-w-[95vw]">
         <div className="flex items-center gap-1 sm:gap-1.5 bg-white/95 border border-amber-300/80 shadow-xl rounded-full px-2.5 py-1.5 backdrop-blur-md">
           
@@ -348,12 +360,12 @@ export default function App() {
             <span className="text-[11px]">{autoScroll ? 'चल रहा है' : 'स्क्रॉल'}</span>
           </button>
 
-          {/* Speed Selector (1x, 1.5x, 2x) */}
+          {/* Speed Selector (0.75x, 1x, 1.5x) */}
           <div className="flex items-center bg-amber-50 rounded-full p-0.5 border border-amber-200/70">
             {[
+              { val: 0.75, label: '0.75x', title: 'धीमी गति (Slow Mobile Pace - 0.75x)' },
               { val: 1.0, label: '1x', title: 'सामान्य गति (Normal Reading - 1x)' },
-              { val: 1.5, label: '1.5x', title: 'मध्यम-तेज़ गति (Medium Fast - 1.5x)' },
-              { val: 2.0, label: '2x', title: 'तेज़ गति (Fast - 2x)' }
+              { val: 1.5, label: '1.5x', title: 'तेज़ गति (Fast - 1.5x)' }
             ].map(({ val, label, title }) => (
               <button
                 key={val}
@@ -401,6 +413,17 @@ export default function App() {
               A+
             </button>
           </div>
+
+          <div className="w-[1px] h-4 bg-amber-200 mx-0.5"></div>
+
+          {/* Scroll to Top Quick Icon */}
+          <button
+            onClick={scrollToTop}
+            className="w-7 h-7 rounded-full flex items-center justify-center text-amber-900 hover:bg-amber-100 active:scale-95 transition"
+            title="शीर्ष पर जाएं (Scroll to Top)"
+          >
+            <ArrowUp className="w-3.5 h-3.5 text-amber-800" />
+          </button>
 
         </div>
       </aside>
