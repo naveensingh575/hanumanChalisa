@@ -128,16 +128,18 @@ export default function App() {
         {/* ================= 1. HEADER / HERO SECTION ================= */}
         <header className="flex flex-col items-center text-center mb-8 sm:mb-10">
           
-          {/* Enlarged Square Hero Image with Soft Rounded Corners & Glow */}
-          <div className="relative group mb-6">
+          {/* 16:9 Widescreen Landscape Hero Banner (1280x720 intrinsic aspect ratio) */}
+          <div className="relative group mb-6 w-full max-w-[354px] sm:max-w-md md:max-w-lg">
             {/* Ambient Divine Glow */}
             <div className="absolute -inset-2 rounded-3xl bg-gradient-to-tr from-amber-500 via-yellow-400 to-red-500 opacity-40 blur-lg group-hover:opacity-70 group-hover:blur-xl transition duration-700"></div>
             
-            {/* Enlarged Square Card (w-48 h-48 mobile to w-64 h-64 / w-72 h-72 desktop) */}
-            <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 rounded-2xl sm:rounded-3xl overflow-hidden border-2 sm:border-4 border-amber-300/90 shadow-xl bg-amber-50 p-1.5 backdrop-blur-xs">
+            {/* 16:9 Aspect Ratio Card */}
+            <div className="relative w-full aspect-[16/9] rounded-2xl sm:rounded-3xl overflow-hidden border-2 sm:border-3 border-amber-300/90 shadow-xl bg-amber-50 p-1.5 backdrop-blur-xs">
               <img
-                src="/assets/hanuman_dhyan.jpg"
-                alt="Lord Hanuman in Dhyan Posture - ध्यान मग्न श्री हनुमान जी"
+                src="/assets/hanuman_dhyan_16_9.jpg"
+                alt="Lord Hanuman in Dhyan Posture - ध्यान मग्न श्री हनुमान जी (16:9 Widescreen)"
+                width={1280}
+                height={720}
                 className="w-full h-full object-cover object-center rounded-xl sm:rounded-2xl transform group-hover:scale-102 transition-transform duration-700"
                 loading="eager"
               />
