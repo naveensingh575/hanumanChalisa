@@ -45,11 +45,6 @@
   box-shadow: 0 4px 24px -2px rgba(217, 119, 6, 0.08);
 }
 
-/* Diya Lamp Glow Effect */
-.diya-glow {
-  filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.8)) drop-shadow(0 0 20px rgba(225, 29, 72, 0.5));
-}
-
 /* Floating Flower Petals */
 @keyframes petalFall {
   0% {
@@ -74,4 +69,43 @@
   pointer-events: none;
   animation: petalFall linear infinite;
   z-index: 40;
+}
+
+/* Divine Breathing Aura Animation */
+@keyframes divineAura {
+  0%, 100% {
+    opacity: 0.45;
+    transform: scale(0.99);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.02);
+  }
+}
+
+.divine-halo-breath {
+  animation: divineAura 5s ease-in-out infinite;
+}
+
+/* Shimmer Light Sweep Effect */
+.shimmer-effect {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.25) 50%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  transition: none;
+  pointer-events: none;
+}
+
+.group:hover .shimmer-effect {
+  left: 140%;
+  transition: left 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }

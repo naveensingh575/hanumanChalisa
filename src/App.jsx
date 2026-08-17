@@ -128,27 +128,32 @@ export default function App() {
         {/* ================= 1. HEADER / HERO SECTION ================= */}
         <header className="flex flex-col items-center text-center mb-8 sm:mb-10">
           
-          {/* Hero Card Enlarge - Length equal to Doha outer box with best-fit height */}
-          <div className="relative group mb-6 w-full">
-            {/* Ambient Divine Glow */}
-            <div className="absolute -inset-2 rounded-3xl bg-gradient-to-tr from-amber-500 via-yellow-400 to-red-500 opacity-40 blur-lg group-hover:opacity-70 group-hover:blur-xl transition duration-700"></div>
+          {/* Hero Card Enlarge - Length equal to Doha outer box with interactive divine animation */}
+          <div className="relative group mb-6 w-full cursor-pointer">
+            {/* Ambient Divine Pulsing Halo Glow */}
+            <div className="absolute -inset-3 rounded-3xl bg-gradient-to-tr from-amber-500 via-yellow-400 to-red-500 divine-halo-breath blur-xl group-hover:opacity-85 group-hover:blur-2xl group-hover:scale-105 transition-all duration-700 pointer-events-none"></div>
             
             {/* Full-width Box matching Doha width - 4:3 aspect ratio showing Mukut to lap and hiding below legs */}
-            <div className="relative w-full aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden border-2 sm:border-3 border-amber-300/90 shadow-xl shadow-amber-900/10 bg-amber-50 p-1.5 backdrop-blur-xs">
+            <div className="relative w-full aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden border-2 sm:border-3 border-amber-300/90 group-hover:border-amber-400 shadow-xl shadow-amber-900/10 group-hover:shadow-amber-500/25 bg-amber-50 p-1.5 backdrop-blur-xs transition-all duration-700">
+              
+              {/* Smooth Zoom Photo */}
               <img
                 src="/assets/hanuman_dhyan.jpg"
                 alt="Lord Hanuman in Dhyan Posture - ध्यान मग्न श्री हनुमान जी"
-                className="w-full h-full object-cover rounded-xl sm:rounded-2xl transform group-hover:scale-102 transition-transform duration-700"
+                className="w-full h-full object-cover rounded-xl sm:rounded-2xl transform transition-transform duration-700 ease-out group-hover:scale-105"
                 style={{ objectPosition: 'center top' }}
                 loading="eager"
               />
+
+              {/* Shimmer Light Sweep on Hover */}
+              <div className="shimmer-effect rounded-xl sm:rounded-2xl" aria-hidden="true"></div>
             </div>
 
             {/* Pranam / Pushpanjali Badge */}
             <button
               onClick={handlePranam}
               title="पुष्पांजलि व प्रणाम अर्पित करें"
-              className="absolute -bottom-3 right-3 sm:right-4 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-600 to-red-600 hover:from-amber-500 hover:to-red-500 text-white text-xs font-semibold shadow-lg active:scale-95 transition-all"
+              className="absolute -bottom-3 right-3 sm:right-4 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-600 to-red-600 hover:from-amber-500 hover:to-red-500 text-white text-xs font-semibold shadow-lg group-hover:shadow-amber-500/40 group-hover:scale-105 active:scale-95 transition-all duration-300"
             >
               <Heart className="w-3.5 h-3.5 fill-current animate-bounce" />
               <span>प्रणाम {pranamCount > 0 && `(${pranamCount})`}</span>
