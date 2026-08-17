@@ -128,17 +128,17 @@ export default function App() {
         {/* ================= 1. HEADER / HERO SECTION ================= */}
         <header className="flex flex-col items-center text-center mb-8 sm:mb-10">
           
-          {/* Hero Banner Card (Rendered: 354x199 px, 16:9 ratio) */}
-          <div className="relative group mb-6 w-full max-w-[354px]">
+          {/* Enlarged Square Hero Card (w-48 h-48 on mobile, w-64 h-64 to w-72 h-72 on desktop) */}
+          <div className="relative group mb-6">
             {/* Ambient Divine Glow */}
             <div className="absolute -inset-2 rounded-3xl bg-gradient-to-tr from-amber-500 via-yellow-400 to-red-500 opacity-40 blur-lg group-hover:opacity-70 group-hover:blur-xl transition duration-700"></div>
             
-            {/* 354x199 px Card Container */}
-            <div className="relative w-full h-[199px] rounded-2xl overflow-hidden border-2 border-amber-300/90 shadow-xl bg-amber-50 p-1 backdrop-blur-xs">
+            {/* Enlarged Square Card Container */}
+            <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 aspect-square rounded-2xl sm:rounded-3xl overflow-hidden border-2 sm:border-4 border-amber-300/90 shadow-xl shadow-amber-900/10 bg-amber-50 p-1.5 backdrop-blur-xs">
               <img
                 src="/assets/hanuman_dhyan.jpg"
                 alt="Lord Hanuman in Dhyan Posture - ध्यान मग्न श्री हनुमान जी"
-                className="w-full h-full object-cover object-center rounded-xl transform group-hover:scale-102 transition-transform duration-700"
+                className="w-full h-full object-cover object-center rounded-xl sm:rounded-2xl transform group-hover:scale-102 transition-transform duration-700"
                 loading="eager"
               />
             </div>
