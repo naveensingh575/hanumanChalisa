@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Bell, Sparkles, Heart, Play, Pause } from 'lucide-react';
+import { Bell, Sparkles, Heart, Play, Pause, ArrowUp } from 'lucide-react';
 import { openingDohas, chaupais, closingDoha } from './data/chalisaData';
 import { playTempleBell } from './utils/audioEngine';
 import confetti from 'canvas-confetti';
@@ -134,6 +134,11 @@ export default function App() {
 
   const toggleAutoScroll = () => {
     setAutoScroll(prev => !prev);
+  };
+
+  const scrollToTop = () => {
+    if (autoScroll) setAutoScroll(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
