@@ -133,13 +133,13 @@ export default function App() {
             {/* Ambient Divine Glow */}
             <div className="absolute -inset-2 rounded-3xl bg-gradient-to-tr from-amber-500 via-yellow-400 to-red-500 opacity-40 blur-lg group-hover:opacity-70 group-hover:blur-xl transition duration-700"></div>
             
-            {/* Full-width Box matching Doha width with top-focused framing for Mukut */}
-            <div className="relative w-full h-64 sm:h-80 md:h-[390px] rounded-2xl sm:rounded-3xl overflow-hidden border-2 sm:border-3 border-amber-300/90 shadow-xl shadow-amber-900/10 bg-amber-50 p-1.5 backdrop-blur-xs">
+            {/* Full-width Box matching Doha width - 4:3 aspect ratio showing Mukut to lap and hiding below legs */}
+            <div className="relative w-full aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden border-2 sm:border-3 border-amber-300/90 shadow-xl shadow-amber-900/10 bg-amber-50 p-1.5 backdrop-blur-xs">
               <img
                 src="/assets/hanuman_dhyan.jpg"
                 alt="Lord Hanuman in Dhyan Posture - ध्यान मग्न श्री हनुमान जी"
-                className="w-full h-full object-cover object-top rounded-xl sm:rounded-2xl transform group-hover:scale-102 transition-transform duration-700"
-                style={{ objectPosition: 'center 6%' }}
+                className="w-full h-full object-cover rounded-xl sm:rounded-2xl transform group-hover:scale-102 transition-transform duration-700"
+                style={{ objectPosition: 'center top' }}
                 loading="eager"
               />
             </div>
